@@ -925,10 +925,11 @@
     .input-container{
       width: 42.5vw;
       border: 1px solid #D7E0EB;
-      height: 5vh;
+      height: 5.5vh;
     }
     .text-input{
       width: 20vw;
+      height: 5vh;
     }
   
     .add-file{
@@ -942,7 +943,7 @@
   
     .send-button{
       width: 3.5rem;
-      height: 5vh;
+      height: 5.5vh;
     }
   
     /*Login*/
@@ -1178,8 +1179,8 @@
     .send-button{
       width: 5rem;
       height: 10vh;
+      background-size: 2rem;
     }
-  
     
     /*Login*/
     .login-components .logo{

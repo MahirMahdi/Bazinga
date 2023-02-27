@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const env = require('dotenv').config();
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const UserRoutes = require('./routes/user');
@@ -18,11 +19,19 @@ const io = require('socket.io')(server,{
         origin: process.env.CLIENT_URL,
     }
 });
+const store = new MongoDBStore({
+    uri: process.env.DATABASE,
+    collection: 'mySessions'
+  });
+
+store.on('error', function(error) {
+console.log(error);
+});
 
 //array of active users
 let activeUsers = []
 
-
+//middlewares
 app.use(bodyParser.urlencoded({ extended: true,}));
 app.use(bodyParser.json());
 app.use('/home',express.static('uploads'));
@@ -30,9 +39,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({credentials:true, origin: process.env.CLIENT_URL}));
 app.use(session({ 
-    secret: process.env.EXPRESS_SECRET, 
+    secret: process.env.SESSION_SECRET, 
     resave: false, 
     saveUninitialized: false,
+    store: store
     }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -137,7 +147,6 @@ io.on('connection', async (socket)=>{
 
         //triggers everytime a conversation is updated
         socket.on('updateConversation',(data)=>{
-            console.log(data);
             io.to(data).emit('conversationUpdated',data)
         })
 
