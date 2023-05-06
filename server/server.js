@@ -19,6 +19,7 @@ const io = require('socket.io')(server,{
         origin: process.env.CLIENT_URL,
     }
 });
+
 const store = new MongoDBStore({
     uri: process.env.DATABASE,
     collection: 'mySessions'
