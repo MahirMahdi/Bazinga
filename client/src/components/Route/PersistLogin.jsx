@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useRefreshToken from "../../hooks/useRefreshToken";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import Loading from "../Shared/Loading";
 
 export default function PersistLogin() {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,20 +27,5 @@ export default function PersistLogin() {
     !user?.accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
-  return (
-    <>
-      {isLoading ? (
-        <div>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={true}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        </div>
-      ) : (
-        <Outlet />
-      )}
-    </>
-  );
+  return <>{isLoading ? <Loading /> : <Outlet />}</>;
 }

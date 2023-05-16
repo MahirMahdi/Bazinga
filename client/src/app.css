@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -5,9 +7,10 @@
 }
 
 body {
-  background-image: url("./assets/background.jpg");
+  background-color: #394867;
+  /* background-image: url("./assets/background.jpg");
   background-repeat: no-repeat;
-  background-size: 100vw 100vh;
+  background-size: 100vw 100vh; */
 }
 
 .home {
@@ -57,7 +60,7 @@ a {
   padding: 0.75rem 1rem;
   border: none;
   border-radius: 20px;
-  background-image: url("./assets/search.png");
+  background-image: url("https://ik.imagekit.io/y4cguk6dk/search.png");
   background-repeat: no-repeat;
   background-position: 1rem center;
   background-size: 24px;
@@ -161,6 +164,7 @@ a {
 .name {
   font-family: "Inter", sans-serif;
   font-size: 1rem;
+  font-weight: 600;
 }
 
 .text {
@@ -189,6 +193,10 @@ a {
   margin-top: 50%;
   font-family: "Nanum Gothic", sans-serif;
   font-size: 1.5rem;
+}
+
+.card-text {
+  font-family: "Nanum Gothic", sans-serif;
 }
 
 .unread-texts {
@@ -239,9 +247,9 @@ a {
   width: 100vw;
   background-color: white;
   height: 77.5vh;
+  padding: 0.5rem 0.75rem;
   overflow-y: auto;
   scroll-behavior: smooth;
-  bottom: 10vh;
 }
 
 .bottom-scroll {
@@ -326,7 +334,7 @@ a {
   height: 1.5rem;
   border: 1px solid black;
   border-radius: 50%;
-  background-image: url("./assets/emoji.png");
+  background-image: url("https://ik.imagekit.io/y4cguk6dk/emoji.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: left center;
@@ -337,6 +345,7 @@ a {
   z-index: 1000;
   bottom: 0;
   background-color: black;
+  border-radius: inherit;
 }
 
 .file-selected {
@@ -400,7 +409,7 @@ a {
   height: 5vh;
   border-radius: 10px;
   background-color: black;
-  background-image: url("./assets/send.png");
+  background-image: url("https://ik.imagekit.io/y4cguk6dk/send.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 1rem;
@@ -412,11 +421,12 @@ a {
   opacity: 0.45;
   cursor: default;
 }
+
 /*Conversation*/
 .conversation {
   display: flex;
   row-gap: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.25rem;
 }
 
 .recieved-info {
@@ -447,11 +457,9 @@ a {
   position: relative;
   max-width: max-content;
   height: auto;
-  background-color: #0055ff;
-  color: white;
+  background-color: rgba(20, 39, 78, 0.7);
   border-radius: 5px;
   font-family: "Nanum Gothic", sans-serif;
-  opacity: 0.7;
 }
 
 .text {
@@ -477,18 +485,17 @@ a {
   position: relative;
   width: 5.75rem;
   height: 5.75rem;
-  padding: 0.75rem 0.75rem;
   object-fit: cover;
   border-radius: 5px;
-  background-color: #d9d9d9;
 }
 
 .sent-container {
   position: relative;
   margin-left: auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  place-items: end;
   row-gap: 0.5rem;
+  color: white;
 }
 
 .text-img-sent {
@@ -497,8 +504,11 @@ a {
   height: 5.75rem;
   object-fit: cover;
   border-radius: 5px;
-  padding: 0.75rem 0.75rem;
-  background-color: #0055ff;
+}
+
+.chat-img {
+  background-color: white;
+  cursor: pointer;
 }
 
 /*Call*/
@@ -530,35 +540,30 @@ a {
 
 /*Login*/
 
-.login {
-  margin-left: 12.5vw;
-  width: 75vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  row-gap: 3.5rem;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 12px;
-  border: 1px solid rgba(209, 213, 219, 0.3);
+.banner {
+  display: none;
 }
 
-.login-components {
+.login {
+  width: 100vw;
+  height: 100vh;
+  background-color: #cedae2;
+  display: grid;
+  place-items: center;
+}
+
+.components {
   display: grid;
   place-items: center;
   row-gap: 1rem;
 }
 
-.login-components .logo {
+.components .logo {
   width: 15rem;
-  row-gap: 2rem;
   margin-bottom: 1.5rem;
 }
 
-.login-components form {
+.components form {
   display: grid;
   place-items: center;
   row-gap: 1rem;
@@ -591,21 +596,26 @@ a {
   outline-style: none;
   background-color: white;
   padding: 1rem;
+  border: 1px solid #d1cccc;
+}
+
+.input-field::placeholder {
+  color: #323130;
+}
+
+.img-name {
+  color: #323130;
 }
 
 .signup-text {
   font-family: "Nanum Gothic", sans-serif;
   font-size: 0.75rem;
-}
-
-.signup-text:hover {
-  color: white;
+  cursor: pointer;
 }
 
 .login-options-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  place-items: center;
   row-gap: 1.5rem;
 }
 
@@ -623,13 +633,13 @@ a {
 
 .half-divider {
   width: 35vw;
-  background-color: black;
-  height: 1.5px;
+  background-color: #888;
+  height: 0.75px;
 }
 
 .login-options {
   display: grid;
-  align-items: center;
+  place-items: center;
   row-gap: 1rem;
 }
 
@@ -657,20 +667,15 @@ a {
 }
 
 /*Signup*/
+
 .signup {
-  width: 75vw;
+  width: 100vw;
   height: 100vh;
-  margin-left: 12.5vw;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 12px;
-  border: 1px solid rgba(209, 213, 219, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
+  background-color: rgb(201, 214, 223);
+  display: grid;
+  place-items: center;
 }
+
 .signup form {
   display: grid;
   place-items: center;
@@ -683,12 +688,6 @@ a {
   color: red;
 }
 
-.signup-header {
-  height: 5vh;
-  display: grid;
-  place-items: center;
-}
-
 .addfile {
   display: flex;
   align-items: center;
@@ -698,9 +697,14 @@ a {
   font-size: 0.75rem;
 }
 
+.img-name {
+  cursor: pointer;
+}
+
 .add-file-label {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .add-file-logo {
@@ -715,6 +719,11 @@ a {
 .imginput {
   display: none;
   visibility: none;
+}
+
+.copyright-text {
+  font-family: "Nanum Gothic", sans-serif;
+  font-size: 0.75rem;
 }
 
 /*Account Details*/
@@ -791,7 +800,7 @@ a {
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     background-color: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(209, 213, 219);
+    border: 1px solid rgba(162, 162, 164, 0.3);
   }
 
   .display-change {
@@ -848,15 +857,19 @@ a {
   /*Chat-box*/
   .home-box {
     position: absolute;
-    display: grid;
-    place-items: center;
     left: 40vw;
     width: 60vw;
     height: 100vh;
     overflow-x: hidden;
-    color: gray;
+    color: white;
     font-family: "Inter", sans-serif;
     font-size: 1.5rem;
+    background-color: rgba(63, 74, 94, 0.7);
+  }
+
+  .start-convo-header {
+    display: grid;
+    place-items: center;
   }
 
   .chat-box {
@@ -879,7 +892,6 @@ a {
     top: 10vh;
     width: 60vw;
     height: 80vh;
-    bottom: 0;
     overflow-y: scroll;
   }
   .user-info {
@@ -948,7 +960,48 @@ a {
   }
 
   /*Login*/
-  .login-components .logo {
+  .main-wrapper {
+    display: flex;
+  }
+
+  .banner {
+    width: 55vw;
+    display: grid;
+    color: white;
+    place-items: center;
+    text-align: center;
+  }
+
+  .banner-header {
+    display: grid;
+    row-gap: 1rem;
+    height: fit-content;
+  }
+
+  .banner-image {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .headline {
+    font-family: "Inter", sans-serif;
+    font-size: 1.75rem;
+  }
+
+  .tagline {
+    font-family: "Nanum Gothic", sans-serif;
+    /* font-size: 0.75rem; */
+  }
+
+  .login {
+    width: 45vw;
+  }
+
+  .components {
+    width: 100%;
+  }
+
+  .components .logo {
     width: 20rem;
   }
 
@@ -962,7 +1015,7 @@ a {
   }
 
   .half-divider {
-    width: 25vw;
+    width: 150px;
   }
 
   .divider p {
@@ -1001,7 +1054,7 @@ a {
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     background-color: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(209, 213, 219, 0.3);
+    border: 1px solid rgba(162, 162, 164, 0.3);
     align-items: center;
   }
 
@@ -1048,7 +1101,7 @@ a {
     position: fixed;
     height: 75vh;
     background-color: white;
-    border: 1px solid rgba(209, 213, 219);
+    border: 1px solid rgba(162, 162, 164, 0.3);
   }
 
   /*Chat-card*/
@@ -1067,16 +1120,21 @@ a {
   /*Chat-box*/
 
   .home-box {
+    position: absolute;
     display: grid;
     place-items: center;
-    overflow-x: hidden;
-    position: absolute;
     left: 30vw;
     width: 70vw;
     height: 100vh;
     color: white;
+    background-color: rgba(63, 74, 94, 0.7);
     font-family: "Inter", sans-serif;
     font-size: 1.5rem;
+  }
+
+  .start-convo-header {
+    display: grid;
+    place-items: center;
   }
 
   .chat-box {
@@ -1184,7 +1242,47 @@ a {
   }
 
   /*Login*/
-  .login-components .logo {
+  .main-wrapper {
+    display: flex;
+  }
+
+  .banner {
+    width: 60vw;
+    display: grid;
+    place-items: center;
+    color: white;
+    text-align: center;
+  }
+
+  .banner-header {
+    display: grid;
+    row-gap: 1rem;
+  }
+
+  .banner-image {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .headline {
+    font-family: "Inter", sans-serif;
+    font-size: 1.75rem;
+  }
+
+  .tagline {
+    font-family: "Nanum Gothic", sans-serif;
+    /* font-size: 0.75rem; */
+  }
+
+  .login {
+    width: 40vw;
+  }
+
+  .components {
+    width: 100%;
+  }
+
+  .components .logo {
     width: 20rem;
   }
 
@@ -1198,11 +1296,11 @@ a {
   }
 
   .half-divider {
-    width: 20vw;
+    width: 150px;
   }
 
   .divider p {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .login-options button {
@@ -1221,14 +1319,8 @@ a {
     transition: 300ms ease-in-out;
   }
 
-  .signup-header .logo {
-    width: 20rem;
-  }
-
-  .signup-header {
-    height: 25vh;
-    display: grid;
-    place-items: center;
+  .signup {
+    width: 40vw;
   }
 
   .addfile {

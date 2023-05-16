@@ -1,8 +1,6 @@
 import useAuth from "./useAuth";
 import useCometChat from "./useCometChat";
 import { CometChat } from "@cometchat-pro/chat";
-import cometApi from "../api/CometApi";
-import { useState } from "react";
 
 export default function useInitComet() {
   //cometchat initialization state
@@ -36,9 +34,7 @@ export default function useInitComet() {
               () => {
                 setInit(true);
               },
-              (error) => {
-                console.log(error);
-              }
+              (error) => {}
             );
           },
           (error) => {
@@ -57,18 +53,7 @@ export default function useInitComet() {
                     import.meta.env.VITE_COMETCHAT_AUTH_KEY
                   ).then(
                     (User) => {
-                      window.CometChatWidget.init({
-                        appID: import.meta.env.VITE_COMETCHAT_APP_ID,
-                        appRegion: import.meta.env.VITE_COMETCHAT_REGION,
-                        authKey: import.meta.env.VITE_COMETCHAT_API_KEY,
-                      }).then(
-                        () => {
-                          setInit(true);
-                        },
-                        (error) => {
-                          console.log(error);
-                        }
-                      );
+                      setInit(true);
                     },
                     (error) => {}
                   );

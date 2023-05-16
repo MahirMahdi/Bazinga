@@ -8,10 +8,13 @@ import useAuth from "../hooks/useAuth";
 import useSocket from "../hooks/useSocket";
 import useCometChat from "../hooks/useCometChat";
 import useStatus from "../hooks/useStatus";
+import Modal from "../components/Chat/Modal";
 
 export default function Chat() {
   const params = useParams();
   const navigate = useNavigate();
+  const [showImage, setShowImage] = useState(false);
+  const [showImageUrl, setShowImageUrl] = useState("");
 
   //search data
   const [search, setSearch] = useState("");
@@ -134,7 +137,7 @@ export default function Chat() {
     }
   }
 
-  function handleEmojiClick(e, emoji) {
+  function handleEmojiClick(emoji, e) {
     let txt = text;
     txt += emoji.emoji;
     setText(txt);
@@ -153,14 +156,14 @@ export default function Chat() {
     setOpen(false);
   }
 
-  useEffect(() => {
-    // if(userId != user?.user._id){
-    //     getChatUserData()
-    // }
-    // else{
-    //     navigate('/')
-    // }
-  }, []);
+  function handleShowImage(e) {
+    setShowImageUrl(e.target.currentSrc);
+    setShowImage(true);
+  }
+
+  function handleCloseImage() {
+    setShowImage(false);
+  }
 
   //data for text submission
   useEffect(() => {
@@ -176,7 +179,7 @@ export default function Chat() {
   useEffect(() => {
     if (init && !launched && launchCount.current === 0) {
       window.CometChatWidget.launch({
-        widgetID: process.env.REACT_APP_COMETCHAT_WIDGET_ID,
+        widgetID: import.meta.env.VITE_COMETCHAT_WIDGET_ID,
         target: "#cometchat",
         roundedCorners: "true",
         height: "0px",
@@ -219,6 +222,11 @@ export default function Chat() {
 
   return (
     <>
+      <Modal
+        show={showImage}
+        onClose={handleCloseImage}
+        imageUrl={showImageUrl}
+      />
       <div className="chat-box">
         <ChatBox
           status={
@@ -235,6 +243,7 @@ export default function Chat() {
           }
           handleSubmit={handleSubmit && handleSubmit}
           handleClick={handleClick}
+          handleShowImage={handleShowImage}
           emojiClose={emojiClose}
           handleEmojiPicker={handleEmojiPicker}
           handleEmojiClick={handleEmojiClick}

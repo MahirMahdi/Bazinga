@@ -69,10 +69,6 @@ export default function Call() {
         onOutgoingCallRejected: (call) => {
           // removing sessionId from sessionStorage
           sessionStorage.removeItem("callDetails");
-          console.log(
-            call.data.entities.on.entity.data.entities.sender.entity,
-            call.data.entities.on.entity.data.entities.receiver.entity
-          );
           callData(
             call.type,
             "declined",
@@ -119,11 +115,6 @@ export default function Call() {
               );
               CometChat.endCall(sessionId).then(
                 (call) => {
-                  console.log(
-                    call.data.entities.on.entity.data.entities.sender.entity,
-                    call.data.entities.on.entity.data.entities.receiver.entity
-                  );
-
                   // removing sessionId from sessionStorage
                   sessionStorage.removeItem("callDetails");
 
@@ -156,18 +147,12 @@ export default function Call() {
                     );
                   }
                 },
-                (error) => {
-                  console.log("error", error);
-                }
+                (error) => {}
               );
             },
             onUserListUpdated: (userList) => {},
             onCallEnded: (call) => {
-              console.log(
-                call.data.entities.on.entity.data.entities.sender.entity,
-                call.data.entities.on.entity.data.entities.receiver.entity
-              );
-
+              console.log(call);
               // removing sessionId from sessionStorage
               sessionStorage.removeItem("callDetails");
 
@@ -200,52 +185,27 @@ export default function Call() {
               var status = CometChat.CALL_STATUS.CANCELLED;
               if (call.callInitiator.uid === user.user._id) {
                 CometChat.rejectCall(sessionId, status).then(
-                  (call) => {
-                    console.log("Call cancelled successfully", call);
-                  },
-                  (error) => {
-                    console.log("Call cancellation failed with error:", error);
-                  }
+                  (call) => {},
+                  (error) => {}
                 );
               }
             },
             onError: (error) => {
-              console.log("Error :", error);
               sessionStorage.removeItem("callDetails");
             },
-            onMediaDeviceListUpdated: (deviceList) => {
-              console.log("Device List:", deviceList);
-            },
-            onUserMuted: (userMuted, userMutedBy) => {
-              // This event will work in JS SDK v3.0.2-beta1 & later.
-              console.log("Listener => onUserMuted:", userMuted, userMutedBy);
-            },
-            onScreenShareStarted: () => {
-              // This event will work in JS SDK v3.0.3 & later.
-              console.log("Screen sharing started.");
-            },
-            onScreenShareStopped: () => {
-              // This event will work in JS SDK v3.0.3 & later.
-              console.log("Screen sharing stopped.");
-            },
+            onMediaDeviceListUpdated: (deviceList) => {},
+            onUserMuted: (userMuted, userMutedBy) => {},
+            onScreenShareStarted: () => {},
+            onScreenShareStopped: () => {},
             onCallSwitchedToVideo: (
               sessionId,
               callSwitchInitiatedBy,
               callSwitchAcceptedBy
-            ) => {
-              // This event will work in JS SDK v3.0.8 & later.
-              console.log("call switched to video:", {
-                sessionId,
-                callSwitchInitiatedBy,
-                callSwitchAcceptedBy,
-              });
-            },
+            ) => {},
           })
         );
       },
-      (error) => {
-        console.log("Call initialization failed with exception:", error);
-      }
+      (error) => {}
     );
   }
 

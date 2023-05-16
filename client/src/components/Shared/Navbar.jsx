@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
-import Bazinga from "../../assets/bazinga.png";
 import useLogout from "../../hooks/useLogout";
 
 export default function Navbar({ image }) {
@@ -35,8 +34,12 @@ export default function Navbar({ image }) {
   return (
     <>
       <div className="display-change">
-        <a href={process.env.REACT_APP_CLIENT_URL}>
-          <img className="logo" src={Bazinga} alt="logo" />
+        <a href={import.meta.env.VITE_CLIENT_URL}>
+          <img
+            className="logo"
+            src={`${import.meta.env.VITE_CDN_URL}/bazinga.png`}
+            alt="logo"
+          />
         </a>
         <div className="notification-user">
           <div>

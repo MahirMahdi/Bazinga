@@ -37,7 +37,7 @@ export default function ChatCard({
   // last text or image or call info
   const fixImgUrl = checkLastTextInfo
     ? checkLastTextInfo.img?.replace(
-        `${process.env.REACT_APP_SERVER_URL}/home/`,
+        `${import.meta.env.VITE_SERVER_URL}/home/`,
         ""
       )
     : null;

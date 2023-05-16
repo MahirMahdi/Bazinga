@@ -1,5 +1,4 @@
 import EmojiPicker from "emoji-picker-react";
-import plus from "../../assets/plus.png";
 
 export default function TextInput({
   handleEmojiClick,
@@ -16,7 +15,11 @@ export default function TextInput({
       <div className="emoji" onClick={handleEmojiPicker}>
         {emojiPicker && (
           <div className="emoji-picker">
-            <EmojiPicker onEmojiClick={handleEmojiClick} />
+            <EmojiPicker
+              lazyLoadEmojis={true}
+              onEmojiClick={handleEmojiClick}
+              emojiStyle="native"
+            />
           </div>
         )}
       </div>
@@ -33,7 +36,10 @@ export default function TextInput({
             onChange={handleImageChange}
           />
           <label htmlFor="unique">
-            <img className="add-file" src={plus} />
+            <img
+              className="add-file"
+              src={`${import.meta.env.VITE_CDN_URL}/plus.png`}
+            />
           </label>
         </div>
         <input
