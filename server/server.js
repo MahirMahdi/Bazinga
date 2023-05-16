@@ -1,173 +1,68 @@
-const express = require('express');
-const app = express();
-const server = require('http').createServer(app)
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const env = require('dotenv').config();
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const UserRoutes = require('./routes/user');
-const ConversationRoutes = require('./routes/conversation');
-const passport = require("passport");
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
-const {User} = require('./models/user')
-const io = require('socket.io')(server,{
-    cors: {
-        origin: process.env.CLIENT_URL,
-    }
-});
-const store = new MongoDBStore({
-    uri: process.env.DATABASE,
-    collection: 'mySessions'
-  });
-
-store.on('error', function(error) {
-console.log(error);
+const app = require("./app");
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+  },
 });
 
 //array of active users
-let activeUsers = []
-
-//middlewares
-app.use(bodyParser.urlencoded({ extended: true,}));
-app.use(bodyParser.json());
-app.use('/home',express.static('uploads'));
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors({credentials:true, origin: process.env.CLIENT_URL}));
-app.use(session({ 
-    secret: process.env.SESSION_SECRET, 
-    resave: false, 
-    saveUninitialized: false,
-    store: store
-    }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
-
-// establishing connection to the database
-mongoose.connect(process.env.DATABASE,{ useNewUrlParser: true, useUnifiedTopology: true})
-.then(()=>{
-    console.log("mongodb is connected");
-})
-.catch((e)=>{
-    console.log(e);
-});
-
-passport.use(User.createStrategy());
-
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findById(id, function (err, user) {
-    done(err, user);
-});
-});
-
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${process.env.SERVER_URL}/auth/google/bazinga`,
-    userProfileURL:"https://www.googleapis.com/oauth2/v3/userinfo"
-},
-function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({username: profile.displayName, email: profile.emails[0].value, img: profile.photos[0].value}, function (err, user) {
-    return cb(err,user)
-})}))
-
-passport.use(new FacebookStrategy({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: `${process.env.SERVER_URL}/auth/facebook/bazinga`,
-    profileFields: ['id', 'displayName', 'photos', 'email']
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOne({email:profile.emails[0].value},function(err,user){
-        if(!user){
-            const newUser = new User({
-                username: profile.displayName,
-                email: profile.emails[0].value,
-                img: profile.photos[0].value
-            });
-
-            newUser.save()
-            return cb(err,newUser)
-
-        }else{
-            return cb(err,user)
-        }
-    })
-}))
-
-//routes for user controllers
-app.use(UserRoutes);
-
-//routes for conversation controllers
-app.use(ConversationRoutes);
+let activeUsers = [];
 
 //establishing socket connection
-io.on('connection', async (socket)=>{
-    //add new user
-    socket.once('addNewUser',(newUserId)=>{
-        if(!activeUsers.some((user)=>user.userId === newUserId)){
-            activeUsers.push({
-                userId: newUserId,
-                socketId : socket.id
-            })
+io.on("connection", async (socket) => {
+  //add new user
+  socket.once("addNewUser", (newUserId) => {
+    if (!activeUsers.some((user) => user.userId === newUserId)) {
+      activeUsers.push({
+        userId: newUserId,
+        socketId: socket.id,
+      });
+    }
+
+    //get active users
+    io.emit("getUsers", activeUsers);
+
+    //join room using conversation id or other user's socket id
+    socket.on("join-room", (roomId) => {
+      socket.rooms.forEach((room) => {
+        if (room != roomId) {
+          socket.join(roomId);
         }
+      });
+    });
 
-        //get active users
-        io.emit('getUsers', activeUsers)
+    //get user Id
+    socket.on("sendUserId", (id) => {
+      const socketId = activeUsers.filter(
+        (activeUser) => activeUser.userId == id
+      )[0]?.socketId;
+      io.emit("getSocketId", socketId);
+    });
 
-        //join room using conversation id or other user's socket id
-        socket.on('join-room',(roomId)=>{
-            socket.rooms.forEach((room)=>{
-                if(room != roomId){
-                    socket.join(roomId)
-                }
-            })
-        })
+    //triggers everytime a conversation is updated
+    socket.on("updateConversation", (data) => {
+      io.to(data).emit("conversationUpdated", data);
+    });
 
-        //get user Id
-        socket.on('sendUserId',(id)=>{
-            const socketId = activeUsers.filter((activeUser) => activeUser.userId == id)[0]?.socketId
-            io.emit('getSocketId',socketId)
-        })
+    socket.once("disconnect", () => {
+      activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
+      io.emit("getUsers", activeUsers);
+    });
+  });
 
-        //triggers everytime a conversation is updated
-        socket.on('updateConversation',(data)=>{
-            io.to(data).emit('conversationUpdated',data)
-        })
+  //remove user from the active users array
+  socket.on("removeUser", (userId) => {
+    activeUsers = activeUsers.filter((user) => user.userId !== userId);
+    io.emit("getUsers", activeUsers);
 
-        socket.once('disconnect',()=>{
-            activeUsers = activeUsers.filter((user)=> user.socketId !== socket.id)
-            io.emit('getUsers', activeUsers)
-        })
-    })
+    socket.on("disconnect", () => {
+      activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
+      io.emit("getUsers", activeUsers);
+    });
+  });
+});
 
-    //remove user from the active users array
-    socket.on('removeUser',(userId)=>{
-        activeUsers = activeUsers.filter((user)=> user.userId !== userId)
-        io.emit('getUsers', activeUsers)
-
-        socket.on('disconnect',()=>{
-            activeUsers = activeUsers.filter((user)=> user.socketId !== socket.id)
-            io.emit('getUsers', activeUsers)
-        })
-    })
-})
-
-server.listen(process.env.PORT,()=>{
-    console.log(`Server is running on port ${process.env.PORT}`);
-})
+server.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
