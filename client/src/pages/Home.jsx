@@ -192,7 +192,15 @@ export default function Home() {
         </div>
       </div>
       <div className="home-box">
-        <span>Start a conversation</span>
+        <div className="start-convo-header">
+          <img
+            alt="message"
+            src={`${import.meta.env.VITE_CDN_URL}/chat`}
+            width="100px"
+            height="100px"
+          />
+          <span>Start a conversation</span>
+        </div>
       </div>
       <div id="cometchat"></div>
     </div>

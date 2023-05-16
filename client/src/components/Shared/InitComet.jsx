@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import useInitComet from "../../hooks/useInitComet";
+import Loading from "./Loading";
 import useCometChat from "../../hooks/useCometChat";
+import useInitComet from "../../hooks/useInitComet";
 
 export default function InitComet() {
   const [loading, setLoading] = useState(true);
@@ -29,20 +28,5 @@ export default function InitComet() {
     !init ? initializeCometChat() : setLoading(false);
   }, []);
 
-  return (
-    <>
-      {loading ? (
-        <div>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={true}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        </div>
-      ) : (
-        <Outlet />
-      )}
-    </>
-  );
+  return <>{loading ? <Loading /> : <Outlet />}</>;
 }

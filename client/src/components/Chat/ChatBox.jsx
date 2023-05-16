@@ -24,6 +24,7 @@ export default function ChatBox({
   text,
   image,
   status,
+  handleShowImage,
 }) {
   //stick the scrollbar to the bottom
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function ChatBox({
             <div className="wrapper">
               {currentConversation.texts.map((text) => (
                 <Conversation
+                  handleShowImage={handleShowImage}
                   key={text._id}
                   img={chatUser?.img}
                   recieved={text.sender_id === userId ? text : null}

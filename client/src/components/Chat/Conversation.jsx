@@ -1,11 +1,7 @@
 import moment from "moment";
 import CallInfo from "./CallInfo";
-import audioCall from "../../assets/call.png";
-import videoCall from "../../assets/video-call.png";
-import audioMissedCall from "../../assets/call-missed.png";
-import videoMissedCall from "../../assets/video-call-missed.png";
 
-export default function Conversation({ sent, recieved, img }) {
+export default function Conversation({ sent, recieved, img, handleShowImage }) {
   //format call duration
   function timeFormat(time) {
     if (time < 60) {
@@ -37,12 +33,12 @@ export default function Conversation({ sent, recieved, img }) {
               </div>
             ) : null}
             {recieved.img ? (
-              <div className="recieved">
-                <img className="text-img-recieved" src={recieved.img} />
-                <br />
-                <p className="text-time">
-                  {moment(recieved.createdAt).format("hh:mm")}
-                </p>
+              <div className="recieved chat-img">
+                <img
+                  className="text-img-recieved"
+                  onClick={handleShowImage}
+                  src={recieved.img}
+                />
               </div>
             ) : null}
             {recieved.call ? (
@@ -51,8 +47,8 @@ export default function Conversation({ sent, recieved, img }) {
                   type="recieved"
                   img={
                     recieved.call.type === "audio"
-                      ? audioMissedCall
-                      : videoMissedCall
+                      ? `${import.meta.env.VITE_CDN_URL}/call-missed.png`
+                      : `${import.meta.env.VITE_CDN_URL}/video-call-missed.png`
                   }
                   message="Missed Call"
                   duration={null}
@@ -61,7 +57,11 @@ export default function Conversation({ sent, recieved, img }) {
               ) : recieved.call.status === "ended" ? (
                 <CallInfo
                   type="recieved"
-                  img={recieved.call.type === "audio" ? audioCall : videoCall}
+                  img={
+                    recieved.call.type === "audio"
+                      ? `${import.meta.env.VITE_CDN_URL}/call.png`
+                      : `${import.meta.env.VITE_CDN_URL}/video-call.png`
+                  }
                   message="Call ended"
                   duration={timeFormat(recieved.call.duration)}
                   time={recieved.createdAt}
@@ -71,8 +71,8 @@ export default function Conversation({ sent, recieved, img }) {
                   type="recieved"
                   img={
                     recieved.call.type === "audio"
-                      ? audioMissedCall
-                      : videoMissedCall
+                      ? `${import.meta.env.VITE_CDN_URL}/call-missed.png`
+                      : `${import.meta.env.VITE_CDN_URL}/video-call-missed.png`
                   }
                   message="Call declined"
                   duration={null}
@@ -94,12 +94,12 @@ export default function Conversation({ sent, recieved, img }) {
             </div>
           ) : null}
           {sent.img ? (
-            <div className="sent">
-              <img className="text-img-sent" src={sent.img} />
-              <br />
-              <p className="text-time">
-                {moment(sent.createdAt).format("hh:mm")}
-              </p>
+            <div className="sent chat-img">
+              <img
+                className="text-img-sent"
+                onClick={handleShowImage}
+                src={sent.img}
+              />
             </div>
           ) : null}
           {sent.call ? (
@@ -107,7 +107,9 @@ export default function Conversation({ sent, recieved, img }) {
               <CallInfo
                 type="sent"
                 img={
-                  sent.call.type === "audio" ? audioMissedCall : videoMissedCall
+                  sent.call.type === "audio"
+                    ? `${import.meta.env.VITE_CDN_URL}/call-missed.png`
+                    : `${import.meta.env.VITE_CDN_URL}/video-call-missed.png`
                 }
                 message="Call not answered"
                 duration={null}
@@ -116,7 +118,11 @@ export default function Conversation({ sent, recieved, img }) {
             ) : sent.call.status === "ended" ? (
               <CallInfo
                 type="sent"
-                img={sent.call.type === "audio" ? audioCall : videoCall}
+                img={
+                  sent.call.type === "audio"
+                    ? `${import.meta.env.VITE_CDN_URL}/call.png`
+                    : `${import.meta.env.VITE_CDN_URL}/video-call.png`
+                }
                 message="Call ended"
                 duration={timeFormat(sent.call.duration)}
                 time={sent.createdAt}
@@ -125,7 +131,9 @@ export default function Conversation({ sent, recieved, img }) {
               <CallInfo
                 type="sent"
                 img={
-                  sent.call.type === "audio" ? audioMissedCall : videoMissedCall
+                  sent.call.type === "audio"
+                    ? `${import.meta.env.VITE_CDN_URL}/call-missed.png`
+                    : `${import.meta.env.VITE_CDN_URL}/video-call-missed.png`
                 }
                 message="Call declined"
                 duration={null}

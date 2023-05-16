@@ -1,8 +1,4 @@
 import { useState } from "react";
-import arrow from "../../assets/left-arrow.png";
-import mobile from "../../assets/mobile.png";
-import camera from "../../assets/camera.png";
-import options from "../../assets/options.png";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,7 +7,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import dustbin from "../../assets/dustbin.png";
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -63,7 +58,7 @@ export default function ChatHeader({
     <div className="chat-header">
       <div className="user-info">
         <img
-          src={arrow}
+          src={`${import.meta.env.VITE_CDN_URL}/left-arrow.png`}
           alt="left-arrow"
           className="arrow"
           onClick={handleClick}
@@ -86,14 +81,22 @@ export default function ChatHeader({
       </div>
       <div className="call-options">
         <a
-          href={`${process.env.REACT_APP_CLIENT_URL}/call/audio/${chatUser._id}`}
+          href={`${import.meta.env.VITE_CLIENT_URL}/call/audio/${chatUser._id}`}
         >
-          <img src={mobile} alt="mobile" className="mobile" />
+          <img
+            src={`${import.meta.env.VITE_CDN_URL}/mobile.png`}
+            alt="mobile"
+            className="mobile"
+          />
         </a>
         <a
-          href={`${process.env.REACT_APP_CLIENT_URL}/call/video/${chatUser._id}`}
+          href={`${import.meta.env.VITE_CLIENT_URL}/call/video/${chatUser._id}`}
         >
-          <img src={camera} alt="camera" className="camera" />
+          <img
+            src={`${import.meta.env.VITE_CDN_URL}/camera.png`}
+            alt="camera"
+            className="camera"
+          />
         </a>
         <Button
           id="demo-positioned-button"
@@ -102,7 +105,11 @@ export default function ChatHeader({
           aria-expanded={open ? "true" : undefined}
           onClick={handleMenuClick}
         >
-          <img src={options} alt="options" className="options" />
+          <img
+            src={`${import.meta.env.VITE_CDN_URL}/options.png`}
+            alt="options"
+            className="options"
+          />
         </Button>
         <Menu
           id="demo-positioned-menu"
@@ -122,7 +129,10 @@ export default function ChatHeader({
           <MenuItem onClick={handleClickOpen}>
             {" "}
             Delete Conversation
-            <img src={dustbin} style={{ width: "1rem" }} />{" "}
+            <img
+              src={`${import.meta.env.VITE_CDN_URL}/dustbin.png`}
+              style={{ width: "1rem" }}
+            />{" "}
           </MenuItem>
         </Menu>
       </div>
