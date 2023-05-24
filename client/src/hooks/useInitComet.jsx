@@ -3,14 +3,10 @@ import useCometChat from "./useCometChat";
 import { CometChat } from "@cometchat-pro/chat";
 
 export default function useInitComet() {
-  //cometchat initialization state
   const { setInit } = useCometChat();
-
   const { user } = useAuth();
 
-  //initializing cometchat
   async function InitComet() {
-    //app settings for initialization
     let appSetting = new CometChat.AppSettingsBuilder()
       .subscribePresenceForAllUsers()
       .setRegion(import.meta.env.VITE_COMETCHAT_REGION)

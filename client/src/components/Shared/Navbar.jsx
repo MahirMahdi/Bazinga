@@ -6,16 +6,11 @@ import { useNavigate } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 
 export default function Navbar({ image }) {
-  // menu states
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
-  // logout hook
   const logout = useLogout();
-
   const navigate = useNavigate();
 
-  // handling menu
   function handleClick(event) {
     setAnchorEl(event.currentTarget);
   }

@@ -14,7 +14,6 @@ const SignupController = async (req, res) => {
     });
   }
 
-  // checking if user already exists
   const existingUser = await User.findOne({ email: email });
   if (existingUser) {
     res.status(400).json({
@@ -35,7 +34,6 @@ const SignupController = async (req, res) => {
       const user = await newUser.save();
       const { _id, email, username, img } = user;
 
-      //access and refresh token is assigned to the user
       const accessToken = jwt.sign(
         { username: user.username, id: user._id, img: user.img },
         process.env.ACCESS_TOKEN_SECRET,
@@ -47,14 +45,12 @@ const SignupController = async (req, res) => {
         { expiresIn: "1d" }
       );
 
-      //refresh token is sent through cookie
       res.cookie("jwt", refreshToken, {
         secure: true,
-        sameSite: "None",
+        sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      //access token is sent along the user details as a response
       res.status(200).json({
         success: true,
         message: "User registered successfully.",

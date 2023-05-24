@@ -6,14 +6,9 @@ import useInitComet from "../../hooks/useInitComet";
 
 export default function InitComet() {
   const [loading, setLoading] = useState(true);
-
-  //state of initialization
   const { init } = useCometChat();
-
-  //hook for initializing cometchat
   const initComet = useInitComet();
 
-  //verifies whether the cometchat has been initialized or not
   useEffect(() => {
     async function initializeCometChat() {
       try {

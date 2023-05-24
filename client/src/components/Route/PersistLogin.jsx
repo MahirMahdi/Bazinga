@@ -6,13 +6,9 @@ import Loading from "../Shared/Loading";
 
 export default function PersistLogin() {
   const [isLoading, setIsLoading] = useState(true);
-
-  //refresh token hook
   const refresh = useRefreshToken();
-
   const { user } = useAuth();
 
-  //verifies whether the access token has been expired or not
   useEffect(() => {
     const verifyRefreshToken = async () => {
       try {

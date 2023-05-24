@@ -26,7 +26,6 @@ export default function ChatBox({
   status,
   handleShowImage,
 }) {
-  //stick the scrollbar to the bottom
   useEffect(() => {
     const chatBody = document.getElementsByClassName("chat-body")[0];
     const wrapper = chatBody.childNodes[0];

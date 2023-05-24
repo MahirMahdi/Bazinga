@@ -16,39 +16,29 @@ export default function Chat() {
   const [showImage, setShowImage] = useState(false);
   const [showImageUrl, setShowImageUrl] = useState("");
 
-  //search data
   const [search, setSearch] = useState("");
   const [result, setResult] = useState("");
 
   const { onlineUsers, setOnlineUsers } = useStatus();
   const { user } = useAuth();
   const { socket } = useSocket();
-
-  //cometchat initialization state
   const { init } = useCometChat();
 
-  // all conversations of the user
   const [conversations, setConversations] = useState("");
-
-  //text submission states
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [emojiPicker, setEmojiPicker] = useState(false);
   const [formData, setFormData] = useState({});
 
-  //chat user data
   const [chatUser, setChatUser] = useState({});
-  // chat user ID
   const userId = params.cuid;
 
   const [open, setOpen] = useState(false);
   const [socketId, setSocketId] = useState("");
 
-  //cometchat widget launch
   const launchCount = useRef(0);
   const [launched, setLaunched] = useState(false);
 
-  //getting all conversations of the user and joining room using conversation id
   async function getAllConversations() {
     const response = await axios.get(`/conversation/${user.user._id}`);
     const allConversations = response.data.conversation;
@@ -60,7 +50,6 @@ export default function Chat() {
     }
   }
 
-  //fetching socket id of the chat user
   function fetchSocketId() {
     socket.emit("sendUserId", userId);
     socket.on("getSocketId", (data) => {
@@ -70,7 +59,6 @@ export default function Chat() {
     });
   }
 
-  //search user
   async function handleSearch(e) {
     e.preventDefault();
     try {
@@ -84,7 +72,6 @@ export default function Chat() {
     }
   }
 
-  //text submission
   async function handleSubmit(e) {
     e.preventDefault();
     const response = await axios.post("/conversation", formData, {
@@ -105,7 +92,6 @@ export default function Chat() {
     }
   }
 
-  //getting chat user data
   async function getChatUserData() {
     const response = await axios.get(`/chatuser/${userId}`);
     if (response.data.user.password) {
@@ -165,7 +151,6 @@ export default function Chat() {
     setShowImage(false);
   }
 
-  //data for text submission
   useEffect(() => {
     setFormData({
       text: text,
@@ -175,7 +160,6 @@ export default function Chat() {
     });
   }, [text, image]);
 
-  //launch cometchat widget
   useEffect(() => {
     if (init && !launched && launchCount.current === 0) {
       window.CometChatWidget.launch({
@@ -184,22 +168,20 @@ export default function Chat() {
         roundedCorners: "true",
         height: "0px",
         width: "0px",
-        defaultID: user?.user._id, //default UID (user) or GUID (group) to show,
-        defaultType: "user", //user or group
+        defaultID: user?.user._id,
+        defaultType: "user",
       });
       setLaunched(true);
       launchCount.current = launchCount.current + 1;
     }
   }, [init, launched]);
 
-  //socket connection
   useEffect(() => {
     if (socket.connected == false) {
       socket.connect();
       socket.emit("addNewUser", user?.user._id);
     }
 
-    //triggers whenever a conversation is updated
     socket.on("conversationUpdated", () => {
       getAllConversations();
     });
@@ -211,7 +193,6 @@ export default function Chat() {
     fetchSocketId();
   }, []);
 
-  // gets all online users
   useEffect(() => {
     if (!onlineUsers) {
       socket.on("getUsers", (users) => {

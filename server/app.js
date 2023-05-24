@@ -23,7 +23,6 @@ store.on("error", function (error) {
   console.log(error);
 });
 
-//middlewares
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/home", express.static("uploads"));
@@ -48,7 +47,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// establishing connection to the database
 mongoose
   .connect(process.env.DATABASE, {
     useNewUrlParser: true,
@@ -82,16 +80,20 @@ passport.use(
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate(
-        {
-          username: profile.displayName,
-          email: profile.emails[0].value,
-          img: profile.photos[0].value,
-        },
-        function (err, user) {
+      User.findOne({ email: profile.emails[0].value }, function (err, user) {
+        if (!user) {
+          const newUser = new User({
+            username: profile.displayName,
+            email: profile.emails[0].value,
+            img: profile.photos[0].value,
+          });
+
+          newUser.save();
+          return cb(err, newUser);
+        } else {
           return cb(err, user);
         }
-      );
+      });
     }
   )
 );
@@ -123,10 +125,7 @@ passport.use(
   )
 );
 
-//routes for user controllers
 app.use(UserRoutes);
-
-//routes for conversation controllers
 app.use(ConversationRoutes);
 
 module.exports = app;

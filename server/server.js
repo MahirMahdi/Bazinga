@@ -6,12 +6,9 @@ const io = require("socket.io")(server, {
   },
 });
 
-//array of active users
 let activeUsers = [];
 
-//establishing socket connection
 io.on("connection", async (socket) => {
-  //add new user
   socket.once("addNewUser", (newUserId) => {
     if (!activeUsers.some((user) => user.userId === newUserId)) {
       activeUsers.push({
@@ -20,10 +17,8 @@ io.on("connection", async (socket) => {
       });
     }
 
-    //get active users
     io.emit("getUsers", activeUsers);
 
-    //join room using conversation id or other user's socket id
     socket.on("join-room", (roomId) => {
       socket.rooms.forEach((room) => {
         if (room != roomId) {
@@ -32,7 +27,6 @@ io.on("connection", async (socket) => {
       });
     });
 
-    //get user Id
     socket.on("sendUserId", (id) => {
       const socketId = activeUsers.filter(
         (activeUser) => activeUser.userId == id

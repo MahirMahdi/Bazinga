@@ -14,7 +14,6 @@ export default function AccountDetails() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  //menu state
   const [open, setOpen] = useState(false);
 
   function handleClickOpen() {
@@ -25,7 +24,6 @@ export default function AccountDetails() {
     setOpen(false);
   }
 
-  //delete user account
   async function handleDelete() {
     await cometApi.delete(`/users/${user.user._id}`, {
       headers: {

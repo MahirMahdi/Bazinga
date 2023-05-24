@@ -1,13 +1,9 @@
 import { useState, createContext } from "react";
 import { io } from "socket.io-client";
 
-// user context
 export const AuthContext = createContext();
-
 export const SocketContext = createContext();
 export const CometChatContext = createContext();
-
-//online users context
 export const StatusContext = createContext();
 
 export default function GlobalProviders({ children }) {

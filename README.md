@@ -1,6 +1,70 @@
 # Bazinga
 
-Bazinga is a modern, feature-rich chat app built using the MERN stack . It utilizes socket.io for real-time communication and is integrated with the CometChat API for voice and video calling capabilities.
-Bazinga is designed to be user-friendly and easy to navigate, making it a great choice for anyone looking for a reliable and efficient chat app.
+Bazinga is a **chat app** built using the **MERN stack** . It utilizes **socket.io** for real-time communication and is integrated with the **CometChat API** for **voice** and **video** calling capabilities.
 
-Just a friendly reminder, be sure to allow cross-domain data tracking, pop-ups & redirects and third-party cookies for authentication to fully experience all the features.
+## Features
+
+- **Real-time asynchronous messaging**
+- **Voice Call**
+- **Video Call**
+
+## Technologies Used
+
+- **Client:** React, Chakra UI, Axios, React-Chartjs-2
+- **Server:** Node.js, Express, MongoDB, ImageKit
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/MahirMahdi/Bazinga.git
+```
+
+### Client
+
+Go to the client directory
+
+```bash
+  cd client
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm start
+```
+
+This will start the server on http://localhost:5173
+
+### Server
+
+Go to the server directory
+
+```bash
+  cd server
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm start
+```
+
+This will start the server on http://localhost:5000
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import axios from "../api/axios";
 
 export default function Home() {
-  //search data
   const [search, setSearch] = useState("");
   const [result, setResult] = useState();
 
@@ -16,17 +15,13 @@ export default function Home() {
   const { user } = useAuth();
   const { socket } = useSocket();
 
-  //cometchat initialization state
   const { init } = useCometChat();
 
-  // all conversations of the user
   const [conversation, setConversation] = useState("");
 
-  //cometchat widget launch
   const [launched, setLaunched] = useState(false);
   const launchCount = useRef(0);
 
-  //getting all conversations of the user and joining room using conversation id
   async function getConversation() {
     const response = await axios.get(`/conversation/${user?.user._id}`);
     const conversations = response.data.conversation;
@@ -36,7 +31,6 @@ export default function Home() {
     }
   }
 
-  //search user
   async function handleSearch(e) {
     e.preventDefault();
     try {
@@ -50,7 +44,6 @@ export default function Home() {
     }
   }
 
-  //launch cometchat widget
   useEffect(() => {
     if (init && !launched && launchCount.current === 0) {
       window.CometChatWidget.launch({
@@ -59,22 +52,20 @@ export default function Home() {
         roundedCorners: "true",
         height: "0px",
         width: "0px",
-        defaultID: user?.user._id, //default UID (user) or GUID (group) to show,
-        defaultType: "user", //user or group
+        defaultID: user?.user._id,
+        defaultType: "user",
       });
       setLaunched(true);
       launchCount.current = launchCount.current + 1;
     }
   }, [init, launched]);
 
-  //socket connection
   useEffect(() => {
     if (socket.connected == false) {
       socket.connect();
       socket.emit("addNewUser", user?.user._id);
     }
 
-    //triggers whenever a conversation is updated
     socket.on("conversationUpdated", () => {
       getConversation();
     });
@@ -84,7 +75,6 @@ export default function Home() {
     getConversation();
   }, []);
 
-  // gets all online users
   useEffect(() => {
     if (!onlineUsers) {
       socket.on("getUsers", (users) => {

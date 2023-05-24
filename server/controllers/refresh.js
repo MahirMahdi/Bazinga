@@ -2,10 +2,8 @@ const { User } = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 const RefreshTokenHandler = (req, res) => {
-  //refresh token is sent through cookies
   const cookies = req.cookies;
 
-  //checks if refresh token exists
   if (cookies?.jwt) {
     const refreshToken = cookies.jwt;
     jwt.verify(
@@ -30,7 +28,6 @@ const RefreshTokenHandler = (req, res) => {
               { expiresIn: "900s" }
             );
 
-            //sends new access token
             res.json({
               user: { username, email, _id, img, conversation },
               accessToken,

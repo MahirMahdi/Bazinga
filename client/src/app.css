@@ -8,9 +8,6 @@
 
 body {
   background-color: #394867;
-  /* background-image: url("./assets/background.jpg");
-  background-repeat: no-repeat;
-  background-size: 100vw 100vh; */
 }
 
 .home {
@@ -227,7 +224,7 @@ a {
 .chat-header {
   display: flex;
   align-items: center;
-  position: fixed;
+  position: absolute;
   justify-content: space-around;
   width: 100vw;
   height: 12.5vh;
@@ -242,7 +239,7 @@ a {
 }
 
 .chat-body {
-  position: fixed;
+  position: absolute;
   top: 12.5vh;
   width: 100vw;
   background-color: white;
@@ -315,7 +312,7 @@ a {
 /*text-input-container*/
 
 .text-input-container {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   display: flex;
   align-items: center;

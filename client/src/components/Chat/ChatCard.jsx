@@ -9,10 +9,8 @@ export default function ChatCard({
   currentUserId,
   status,
 }) {
-  //chat user data
   const [chatUser, setChatUser] = useState();
 
-  //gets the chat user data
   async function getUserData() {
     const response = await axios.get(`/chatuser/${userId}`);
     if (!response.data.message) {

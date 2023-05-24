@@ -16,14 +16,12 @@ const startConversation = async (req, res) => {
     },
   };
 
-  //checks if conversation already exists
   const findConversation = await User.find({
     conversation: {
       $elemMatch: { members: { $all: [sender_id, receiver_id] } },
     },
   });
 
-  //if conversation is new
   if (findConversation.length === 0) {
     await User.updateMany(
       { _id: { $in: [receiver_id, sender_id] } },

@@ -1,0 +1,1 @@
+GitHub doesn't allow adding empty folders to a git repository. Users upload text and image files to this folder. Then, the images are uploaded to imagekit, and finally, the original image in the folder is deleted.

@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
-const Call = require('./call')
+const mongoose = require("mongoose");
+const Call = require("./call");
 
-const Text = new mongoose.Schema({
-    sender_id :String,
+const Text = new mongoose.Schema(
+  {
+    sender_id: String,
     text: String,
-    img:String,
-    call:Call
-    },
-    {timestamps:true}   
-)
+    img: String,
+    call: Call,
+  },
+  { timestamps: true }
+);
 
-module.exports = Text
+module.exports = Text;

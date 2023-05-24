@@ -2,7 +2,6 @@ import moment from "moment";
 import CallInfo from "./CallInfo";
 
 export default function Conversation({ sent, recieved, img, handleShowImage }) {
-  //format call duration
   function timeFormat(time) {
     if (time < 60) {
       return `${time}s`;

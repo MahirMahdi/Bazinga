@@ -9,26 +9,20 @@ import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState(true);
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+  const [loginButtonDisabled, setLoginButtonDisabled] = useState(true);
+  const [signupButtonDisabled, setSignupButtonDisabled] = useState(true);
+  const [formData, setFormData] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   function handleType() {
     setType((prev) => !prev);
   }
 
-  //login error
-  const [error, setError] = useState();
-
-  //login info
-  const [formData, setFormData] = useState();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
-  const { setUser } = useAuth();
-  const [buttonDisabled, setButtonDisabled] = useState(true);
-
-  // handle login
-  async function handleLogin(e) {
-    e.preventDefault();
+  async function handleLogin() {
     setIsLoading(true);
     try {
       const response = await axios.post("/login", formData, {
@@ -53,7 +47,7 @@ export default function Login() {
       password: password,
     });
     if (email && password) {
-      setButtonDisabled(false);
+      setLoginButtonDisabled(false);
     }
   }, [email, password]);
 
@@ -63,7 +57,6 @@ export default function Login() {
   const [signupPassword, setSignupPassword] = useState("");
   const [img, setImg] = useState("");
 
-  //image file name
   const [imgName, setImgName] = useState("Select a photo...");
 
   useEffect(() => {
@@ -73,14 +66,12 @@ export default function Login() {
       email: signupEmail,
       password: signupPassword,
     });
-    if (img && username && email && password) {
-      setButtonDisabled(false);
+    if (img && username && signupEmail && signupPassword) {
+      setSignupButtonDisabled(false);
     }
-  }, [img, username, email, password]);
+  }, [img, username, signupEmail, signupPassword]);
 
-  // handle signup
-  async function handleSignup(e) {
-    // e.preventDefault();
+  async function handleSignup() {
     setIsLoading(true);
     try {
       const response = await axios.post("/signup", signupFormData, {
@@ -114,6 +105,7 @@ export default function Login() {
             {error && <p className="error-text">{error}</p>}
             <input
               type="email"
+              inputMode="email"
               className="input-field"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
@@ -135,7 +127,7 @@ export default function Login() {
                 borderRadius: "12.5px",
                 fontSize: ".75rem",
               }}
-              disabled={buttonDisabled}
+              disabled={loginButtonDisabled}
               onClick={handleLogin}
             >
               Login
@@ -190,79 +182,77 @@ export default function Login() {
               alt="logo"
             />
             {error && <p className="error-text">{error}</p>}
-            <form onSubmit={handleSignup}>
+            <input
+              required={true}
+              type="text"
+              className="input-field"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+            />
+            <input
+              required={true}
+              type="email"
+              inputMode="email"
+              className="input-field"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+            />
+            <input
+              required={true}
+              type="password"
+              className="input-field"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+            <div className="input-field addfile">
               <input
                 required={true}
-                type="text"
-                className="input-field"
-                placeholder="Username"
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
-              />
-              <input
-                required={true}
-                type="email"
-                className="input-field"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-              />
-              <input
-                required={true}
-                type="password"
-                className="input-field"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-              />
-              <div className="input-field addfile">
-                <input
-                  required={true}
-                  id="signup-image"
-                  type="file"
-                  className="input-field imginput"
-                  accept="image/*"
-                  onChange={(e) => {
-                    setImg(e.target.files[0]);
-                    setImgName(
-                      document
-                        .getElementsByClassName("img-name")[0]
-                        .innerHTML.replace(imgName, e.target.files[0].name)
-                    );
-                  }}
-                />
-                <label htmlFor="signup-image" className="add-file-label">
-                  <img
-                    src={`${import.meta.env.VITE_CDN_URL}/cam.png`}
-                    className="add-file-logo"
-                    alt="cam"
-                  />
-                </label>
-                <label htmlFor="signup-image">
-                  <p className="img-name">
-                    {imgName.length > 20
-                      ? imgName.slice(0, 12) + "..."
-                      : imgName}
-                  </p>
-                </label>
-              </div>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "black",
-                  color: "white",
-                  padding: ".5rem 3rem",
-                  borderRadius: "12.5px",
-                  fontSize: ".75rem",
+                id="signup-image"
+                type="file"
+                className="input-field imginput"
+                accept="image/*"
+                onChange={(e) => {
+                  setImg(e.target.files[0]);
+                  setImgName(
+                    document
+                      .getElementsByClassName("img-name")[0]
+                      .innerHTML.replace(imgName, e.target.files[0].name)
+                  );
                 }}
-                disabled={buttonDisabled}
-              >
-                Signup
-              </Button>
-              <p className="signup-text" onClick={handleType}>
-                Already have an account? Click here to Login.
-              </p>
-            </form>
+              />
+              <label htmlFor="signup-image" className="add-file-label">
+                <img
+                  src={`${import.meta.env.VITE_CDN_URL}/cam.png`}
+                  className="add-file-logo"
+                  alt="cam"
+                />
+              </label>
+              <label htmlFor="signup-image">
+                <p className="img-name">
+                  {imgName.length > 20 ? imgName.slice(0, 12) + "..." : imgName}
+                </p>
+              </label>
+            </div>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                padding: ".5rem 3rem",
+                borderRadius: "12.5px",
+                fontSize: ".75rem",
+              }}
+              disabled={signupButtonDisabled}
+              onClick={handleSignup}
+            >
+              Signup
+            </Button>
+            <p className="signup-text" onClick={handleType}>
+              Already have an account? Click here to Login.
+            </p>
           </div>
           <p className="copyright-text">2023 © All rights reserved</p>
         </div>

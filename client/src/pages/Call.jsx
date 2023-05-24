@@ -10,17 +10,14 @@ import { useNavigate } from "react-router-dom";
 export default function Call() {
   const { user } = useAuth();
 
-  //cometchat initialization state
   const { init } = useCometChat();
 
   const params = useParams();
   const { socket } = useSocket();
   const navigate = useNavigate();
 
-  //chat user ID
   const userId = params.cuid;
 
-  //function for updating call details
   async function callData(type, status, duration, senderId, receiverId) {
     const formData = {
       type: type,
@@ -35,25 +32,19 @@ export default function Call() {
     });
     const currentConversation = response.data.conversation[0];
 
-    //if conversation is started with the call
     if (currentConversation?.texts.length === 1) {
       socket.emit("sendUserId", userId);
       socket.on("getSocketId", (data) => {
         socket.emit("join-room", data);
         socket.emit("updateConversation", data);
       });
-    }
-
-    //if conversation already exists
-    else {
+    } else {
       socket.emit("updateConversation", currentConversation._id);
     }
     navigate(`/chat/${receiverId}`);
   }
 
-  // function for initiating call
   function initiateCall() {
-    //users and call type info
     var receiverID = userId;
     var callType =
       params.type === "audio"
@@ -62,12 +53,10 @@ export default function Call() {
     var receiverType = CometChat.RECEIVER_TYPE.USER;
     var listnerID = user.user._id;
 
-    //call listener for handling call rejection info
     CometChat.addCallListener(
       listnerID,
       new CometChat.CallListener({
         onOutgoingCallRejected: (call) => {
-          // removing sessionId from sessionStorage
           sessionStorage.removeItem("callDetails");
           callData(
             call.type,
@@ -80,10 +69,8 @@ export default function Call() {
       })
     );
 
-    //details for initiating call
     var call = new CometChat.Call(receiverID, callType, receiverType);
 
-    //initiate call
     CometChat.initiateCall(call).then(
       (outGoingCall) => {
         //saving sessionId in session storage for handling multiple call initializing issues
@@ -97,7 +84,6 @@ export default function Call() {
           })
         );
 
-        //settings for starting the call
         var callSettings = new CometChat.CallSettingsBuilder()
           .setSessionID(sessionId)
           .enableDefaultLayout(true)
@@ -115,10 +101,9 @@ export default function Call() {
               );
               CometChat.endCall(sessionId).then(
                 (call) => {
-                  // removing sessionId from sessionStorage
                   sessionStorage.removeItem("callDetails");
 
-                  // if call is ended after a conversation
+                  // if call ends after a conversation
                   if (
                     call.status === "ended" &&
                     call.data.entities.on.entity.duration
@@ -153,10 +138,9 @@ export default function Call() {
             onUserListUpdated: (userList) => {},
             onCallEnded: (call) => {
               console.log(call);
-              // removing sessionId from sessionStorage
               sessionStorage.removeItem("callDetails");
 
-              // if call is ended after answering
+              // if call ends after answering
               if (
                 call.status === "ended" &&
                 call.data.entities.on.entity.duration
@@ -181,7 +165,6 @@ export default function Call() {
                 );
               }
 
-              // if the call initiator ends the call before answering, then call is cancelled
               var status = CometChat.CALL_STATUS.CANCELLED;
               if (call.callInitiator.uid === user.user._id) {
                 CometChat.rejectCall(sessionId, status).then(
@@ -209,18 +192,12 @@ export default function Call() {
     );
   }
 
-  // checks for multiple call initialization
   useEffect(() => {
-    //checks sessionStorage for sessionId
     const callDetails = JSON.parse(sessionStorage.getItem("callDetails"));
 
-    //if sessionId doesn't exist
     if (!callDetails) {
       initiateCall();
-    }
-
-    //if sessionId exists
-    else {
+    } else {
       var sessionId = callDetails.sessionID;
       var status =
         callDetails.initiatior === user?.user._id
@@ -243,7 +220,6 @@ export default function Call() {
     }
   }, [init]);
 
-  //socket connection
   useEffect(() => {
     if (socket.connected == false) {
       socket.connect();
