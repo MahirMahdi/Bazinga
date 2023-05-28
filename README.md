@@ -10,7 +10,7 @@ Bazinga is a **chat app** built using the **MERN stack** . It utilizes **socket.
 
 ## Technologies Used
 
-- **Client:** React, Chakra UI, Axios, React-Chartjs-2
+- **Client:** React, Material UI, Axios, CometChat API
 - **Server:** Node.js, Express, MongoDB, ImageKit
 
 ## Run Locally
